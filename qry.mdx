@@ -1,0 +1,285 @@
+ SELECT NON EMPTY { [Measures].[total_venta] } ON COLUMNS
+, NON EMPTY 
+
+
+TOPCOUNT(
+        [Dim Date].[anio_mes].[English Month Name].ALLMEMBERS * 
+        [Dim Producto].[Category Nombre].[Category Nombre].ALLMEMBERS * 
+        [Dim Producto].[Producto Descripcion].[Producto Descripcion].ALLMEMBERS
+        ,10
+        ,[Measures].[total_venta]
+    ) 
+
+
+DIMENSION PROPERTIES MEMBER_CAPTION, MEMBER_UNIQUE_NAME 
+ON ROWS 
+FROM [ventas] CELL PROPERTIES VALUE, BACK_COLOR, FORE_COLOR, FORMATTED_VALUE, FORMAT_STRING, FONT_NAME, FONT_SIZE, FONT_FLAGS
+
+
+
+
+
+
+
+
+
+
+
+ SELECT NON EMPTY { [Measures].[total_compra] } 
+ ON COLUMNS, NON EMPTY 
+ { 
+     (
+         [Dim Category].[Category Nombre].[Category Nombre].ALLMEMBERS 
+     ) 
+} DIMENSION PROPERTIES MEMBER_CAPTION, MEMBER_VALUE, MEMBER_UNIQUE_NAME ON ROWS 
+FROM ( 
+        SELECT ( { [Dim Date].[Calendar Year].[All] } ) ON COLUMNS FROM [compras]
+    ) WHERE 
+    ( 
+        [Dim Date].[Calendar Year].[All] 
+    ) 
+
+
+
+
+ SELECT NON EMPTY { } ON COLUMNS 
+ FROM ( SELECT ( STRTOSET(@DimDateEnglishMonthName, CONSTRAINED) ) ON COLUMNS FROM ( SELECT ( STRTOSET(@DimDateCalendarYear, CONSTRAINED) ) ON COLUMNS FROM [compras])) WHERE ( IIF( STRTOSET(@DimDateCalendarYear, CONSTRAINED).Count = 1, STRTOSET(@DimDateCalendarYear, CONSTRAINED), [Dim Date].[Calendar Year].currentmember ), IIF( STRTOSET(@DimDateEnglishMonthName, CONSTRAINED).Count = 1, STRTOSET(@DimDateEnglishMonthName, CONSTRAINED), [Dim Date].[English Month Name].currentmember ) ) CELL PROPERTIES VALUE
+
+
+
+
+SELECT NON EMPTY 
+{ 
+    [Measures].[total_venta] 
+} ON COLUMNS, NON EMPTY 
+
+TOPCOUNT(
+        [Dim Date].[anio_mes].[English Month Name].ALLMEMBERS * 
+        [Dim Producto].[Category Nombre].[Category Nombre].ALLMEMBERS * 
+        [Dim Producto].[Producto Descripcion].[Producto Descripcion].ALLMEMBERS
+        ,10
+        ,[Measures].[total_venta]
+    ) 
+
+
+DIMENSION PROPERTIES MEMBER_CAPTION, MEMBER_VALUE, MEMBER_UNIQUE_NAME ON ROWS 
+FROM ( SELECT ( STRTOSET(@DimDateEnglishMonthName, CONSTRAINED) ) ON COLUMNS 
+FROM ( SELECT ( STRTOSET(@DimDateCalendarYear, CONSTRAINED) ) ON COLUMNS 
+FROM [compras])) 
+WHERE ( 
+    IIF( STRTOSET(@DimDateCalendarYear, CONSTRAINED).Count = 1, STRTOSET(@DimDateCalendarYear, CONSTRAINED), 
+    [Dim Date].[Calendar Year].currentmember 
+    ), 
+    IIF( 
+        STRTOSET(@DimDateEnglishMonthName, CONSTRAINED).Count = 1, STRTOSET(@DimDateEnglishMonthName, CONSTRAINED), 
+        [Dim Date].[English Month Name].currentmember 
+    ) 
+) CELL PROPERTIES VALUE, BACK_COLOR, FORE_COLOR, FORMATTED_VALUE, FORMAT_STRING, FONT_NAME, FONT_SIZE, FONT_FLAGS
+
+
+
+ SELECT NON EMPTY { [Measures].[total_venta] } ON COLUMNS, NON EMPTY { ([Dim Producto].[Category Nombre].[Category Nombre].ALLMEMBERS * [Dim Producto].[Producto Descripcion].[Producto Descripcion].ALLMEMBERS ) } DIMENSION PROPERTIES MEMBER_CAPTION, MEMBER_VALUE, MEMBER_UNIQUE_NAME ON ROWS FROM ( SELECT ( STRTOSET(@DimDateEnglishMonthName, CONSTRAINED) ) ON COLUMNS FROM ( SELECT ( STRTOSET(@DimDateCalendarYear, CONSTRAINED) ) ON COLUMNS FROM [ventas])) WHERE ( IIF( STRTOSET(@DimDateCalendarYear, CONSTRAINED).Count = 1, STRTOSET(@DimDateCalendarYear, CONSTRAINED), [Dim Date].[Calendar Year].currentmember ), IIF( STRTOSET(@DimDateEnglishMonthName, CONSTRAINED).Count = 1, STRTOSET(@DimDateEnglishMonthName, CONSTRAINED), [Dim Date].[English Month Name].currentmember ) ) CELL PROPERTIES VALUE, BACK_COLOR, FORE_COLOR, FORMATTED_VALUE, FORMAT_STRING, FONT_NAME, FONT_SIZE, FONT_FLAGS
+
+
+
+
+
+
+
+  SELECT NON EMPTY { 
+      [Measures].[total_venta] 
+      } ON COLUMNS, NON EMPTY 
+      { 
+        TOPCOUNT(
+            [Dim Date].[Calendar Year].[Calendar Year].ALLMEMBERS * 
+            [Dim Date].[English Month Name].[English Month Name].ALLMEMBERS * 
+            [Dim Producto].[Category Nombre].[Category Nombre].ALLMEMBERS * 
+            [Dim Producto].[categoria_descripcion].[Producto Descripcion].ALLMEMBERS
+        ,10
+        ,[Measures].[total_venta]) 
+    } DIMENSION PROPERTIES MEMBER_CAPTION, MEMBER_VALUE, MEMBER_UNIQUE_NAME ON ROWS 
+    FROM ( SELECT ( STRTOSET(@DimDateEnglishMonthName, CONSTRAINED) ) ON COLUMNS 
+    FROM ( SELECT ( STRTOSET(@DimDateCalendarYear, CONSTRAINED) ) ON COLUMNS FROM [ventas])) CELL PROPERTIES VALUE, BACK_COLOR, FORE_COLOR, FORMATTED_VALUE, FORMAT_STRING, FONT_NAME, FONT_SIZE, FONT_FLAGS
+
+
+
+
+SELECT NON EMPTY 
+{ 
+     [Measures].[total_venta]
+} 
+ON COLUMNS, NON EMPTY 
+{ 
+    TOPCOUNT(
+        [Dim Date].[Calendar Year].[Calendar Year].ALLMEMBERS * 
+        [Dim Customer].[cli_pro_nombre].[Customer Nombre].ALLMEMBERS 
+    ,10
+    ,[Measures].[total_venta]) 
+} DIMENSION PROPERTIES MEMBER_CAPTION, MEMBER_VALUE, MEMBER_UNIQUE_NAME ON ROWS 
+FROM ( SELECT ( STRTOSET(@DimDateCalendarYear, CONSTRAINED) ) ON COLUMNS 
+FROM [ventas]) CELL PROPERTIES VALUE, BACK_COLOR, FORE_COLOR, FORMATTED_VALUE, FORMAT_STRING, FONT_NAME, FONT_SIZE, FONT_FLAGS
+
+
+
+
+
+
+
+
+
+
+
+SELECT NON EMPTY 
+{ 
+     [Measures].[total_compra] 
+} 
+ ON COLUMNS, NON EMPTY 
+{ 
+    TOPCOUNT(
+         [Dim Date].[Calendar Year].[Calendar Year].ALLMEMBERS * 
+         [Dim Date].[Calendar Semester].[Calendar Semester].ALLMEMBERS * 
+         [Dim Date].[English Month Name].[English Month Name].ALLMEMBERS * 
+         [Dim Date].[Date Key].[Date Key].ALLMEMBERS 
+    ,10
+    ,[Measures].[total_compra]) 
+} DIMENSION PROPERTIES MEMBER_CAPTION, MEMBER_VALUE, MEMBER_UNIQUE_NAME ON ROWS 
+FROM [compras] CELL PROPERTIES VALUE, BACK_COLOR, FORE_COLOR, FORMATTED_VALUE, FORMAT_STRING, FONT_NAME, FONT_SIZE, FONT_FLAGS
+
+
+
+ SELECT NON EMPTY 
+ { 
+     [Measures].[total_compra] 
+ } ON COLUMNS, NON EMPTY 
+{ 
+     TOPCOUNT(
+     [Dim Date].[Calendar Year].[Calendar Year].ALLMEMBERS * 
+     [Dim Date].[Calendar Semester].[Calendar Semester].ALLMEMBERS * 
+     [Dim Date].[English Month Name].[English Month Name].ALLMEMBERS 
+     ,10
+     ,[Measures].[total_compra]
+     ) 
+} DIMENSION PROPERTIES MEMBER_CAPTION, MEMBER_VALUE, MEMBER_UNIQUE_NAME ON ROWS 
+FROM [compras] CELL PROPERTIES VALUE, BACK_COLOR, FORE_COLOR, FORMATTED_VALUE, FORMAT_STRING, FONT_NAME, FONT_SIZE, FONT_FLAGS
+
+
+
+
+
+ SELECT NON EMPTY 
+ { 
+     [Measures].[Cantdiad] 
+ } ON COLUMNS, NON EMPTY 
+{ 
+     TOPCOUNT(
+         [Dim Customer].[Customer Nombre].[Customer Nombre].ALLMEMBERS 
+     ,10
+     ,[Measures].[Cantdiad]) 
+} DIMENSION PROPERTIES MEMBER_CAPTION, MEMBER_VALUE, MEMBER_UNIQUE_NAME ON ROWS 
+FROM [compras] CELL PROPERTIES VALUE, BACK_COLOR, FORE_COLOR, FORMATTED_VALUE, FORMAT_STRING, FONT_NAME, FONT_SIZE, FONT_FLAGS
+
+
+
+
+
+
+ SELECT NON EMPTY 
+ { 
+     [Measures].[Cantdiad] 
+ } ON COLUMNS, NON EMPTY 
+ { 
+    TOPCOUNT(
+         [Dim Date].[Calendar Year].[Calendar Year].ALLMEMBERS * 
+         [Dim Date].[English Month Name].[English Month Name].ALLMEMBERS * 
+         [Dim Date].[English Day Name Of Week].[English Day Name Of Week].ALLMEMBERS * 
+         [Dim Date].[Full Date Alternate Key].[Full Date Alternate Key].ALLMEMBERS 
+    ,10
+    ,[Measures].[Cantdiad]) 
+} DIMENSION PROPERTIES MEMBER_CAPTION, MEMBER_VALUE, MEMBER_UNIQUE_NAME ON ROWS 
+FROM ( SELECT ( STRTOSET(@DimDateEnglishMonthName, CONSTRAINED) ) ON COLUMNS 
+FROM ( SELECT ( STRTOSET(@DimDateCalendarYear, CONSTRAINED) ) ON COLUMNS 
+FROM [ventas])) CELL PROPERTIES VALUE, BACK_COLOR, FORE_COLOR, FORMATTED_VALUE, FORMAT_STRING, FONT_NAME, FONT_SIZE, FONT_FLAGS
+
+
+ SELECT NON EMPTY 
+ { 
+     [Measures].[total_venta] 
+ } ON COLUMNS, NON EMPTY 
+{ 
+     TOPCOUNT(
+     [Dim Date].[Calendar Year].[Calendar Year].ALLMEMBERS * 
+     [Dim Date].[Calendar Semester].[Calendar Semester].ALLMEMBERS * 
+     [Dim Date].[English Month Name].[English Month Name].ALLMEMBERS 
+     ,10
+     ,[Measures].[total_venta]
+     ) 
+} DIMENSION PROPERTIES MEMBER_CAPTION, MEMBER_VALUE, MEMBER_UNIQUE_NAME ON ROWS 
+FROM [ventas] CELL PROPERTIES VALUE, BACK_COLOR, FORE_COLOR, FORMATTED_VALUE, FORMAT_STRING, FONT_NAME, FONT_SIZE, FONT_FLAGS
+
+
+
+
+
+
+SELECT NON EMPTY 
+{ 
+    [Measures].[Cantdiad], [Measures].[total_compra] 
+} ON COLUMNS, NON EMPTY 
+{ 
+    TOPCOUNT(
+        [Dim Date].[Calendar Year].[Calendar Year].ALLMEMBERS * 
+        [Dim Customer].[cli_pro_nombre].[Customer Nombre].ALLMEMBERS
+    ,10
+    ,[Measures].[Cantdiad]) 
+} DIMENSION PROPERTIES MEMBER_CAPTION, MEMBER_VALUE, MEMBER_UNIQUE_NAME ON ROWS 
+FROM ( SELECT ( STRTOSET(@DimDateCalendarYear, CONSTRAINED) ) ON COLUMNS 
+FROM [compras]) CELL PROPERTIES VALUE, BACK_COLOR, FORE_COLOR, FORMATTED_VALUE, FORMAT_STRING, FONT_NAME, FONT_SIZE, FONT_FLAGS
+
+
+
+
+SELECT NON EMPTY 
+{ 
+     [Measures].[total_compra] 
+} 
+ ON COLUMNS, NON EMPTY 
+{ 
+    TOPCOUNT(
+         [Dim Date].[Calendar Year].[Calendar Year].ALLMEMBERS * 
+         [Dim Date].[Calendar Semester].[Calendar Semester].ALLMEMBERS * 
+         [Dim Date].[English Month Name].[English Month Name].ALLMEMBERS * 
+         [Dim Date].[Full Date Alternate Key].[Full Date Alternate Key].ALLMEMBERS
+    ,10
+    ,[Measures].[total_compra]) 
+} DIMENSION PROPERTIES MEMBER_CAPTION, MEMBER_VALUE, MEMBER_UNIQUE_NAME ON ROWS 
+FROM [compras] CELL PROPERTIES VALUE, BACK_COLOR, FORE_COLOR, FORMATTED_VALUE, FORMAT_STRING, FONT_NAME, FONT_SIZE, FONT_FLAGS
+
+
+ SELECT NON EMPTY 
+ { 
+     [Measures].[total_compra] 
+ } ON COLUMNS, NON EMPTY 
+{ 
+     TOPCOUNT(
+     [Dim Date].[Calendar Year].[Calendar Year].ALLMEMBERS * 
+     [Dim Date].[Calendar Semester].[Calendar Semester].ALLMEMBERS * 
+     [Dim Date].[English Month Name].[English Month Name].ALLMEMBERS 
+     ,10
+     ,[Measures].[total_compra]
+     ) 
+} DIMENSION PROPERTIES MEMBER_CAPTION, MEMBER_VALUE, MEMBER_UNIQUE_NAME ON ROWS 
+FROM [compras] CELL PROPERTIES VALUE, BACK_COLOR, FORE_COLOR, FORMATTED_VALUE, FORMAT_STRING, FONT_NAME, FONT_SIZE, FONT_FLAGS
+
+
+
+
+
+
+
+
+
+
+
+
+
+

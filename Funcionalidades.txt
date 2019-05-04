@@ -1,0 +1,19 @@
+FUNCIONALIDADES
+----------------------------------------------------------------------------------
+1.Login
+2.Listar Cuentas Usuario
+3.Logout
+4.Ver historial de cuentas
+5.Realizar Transacción
+6.Elegir cuenta transacción
+7.Notificación de transacción satisfactoria
+8.Agregar Servicios
+9.Ver Servicios
+10.Ver Cuentas
+11.Agregar Cuentas
+12.Ver Usuarios
+13.Editar Cuentas
+14.Eliminar Cuentas
+15.Editar Servicios
+16.Eliminar Servicios
+17.Eliminar Usuarios

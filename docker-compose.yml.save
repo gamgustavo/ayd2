@@ -1,0 +1,19 @@
+systemctl daemon-reload 
+version: "2"
+services:
+  db:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data:/data/db
+  web:
+     build: ./webapp
+     command: python manage.py runserver 0.0.0.0:8000 
+     volumes: 
+       - ./webapp:/webapp
+     ports: 
+       - "8000:8000"
+     depends_on:
+       - db 
+
