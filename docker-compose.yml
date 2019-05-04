@@ -25,6 +25,7 @@ services:
   web:
      build: ./webapp
      command: bash -c "python manage.py makemigrations & python manage.py migrate & gunicorn django_environments.wsgi:application -b 0.0.0.0:8000 --workers 3"
+     command: python manage.py runserver 0.0.0.0:8000 
      volumes: 
        - ./webapp:/webapp
      expose: 
